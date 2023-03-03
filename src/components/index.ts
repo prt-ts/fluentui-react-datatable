@@ -1,0 +1,1 @@
+export { FluentUIReactTable } from "./FluentUIReactTable";

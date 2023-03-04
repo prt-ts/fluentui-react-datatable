@@ -13,8 +13,6 @@
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "declarationDir": "types",
-    "emitDeclarationOnly": true,
-    "baseUrl": "./src",
-    "rootDir": "./src",
+    "emitDeclarationOnly": true 
   }
 }

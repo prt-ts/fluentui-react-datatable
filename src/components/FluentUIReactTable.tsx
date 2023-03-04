@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Avatar, Badge, Button, Checkbox, FluentProvider, Popover, PopoverSurface, PopoverTrigger, PresenceBadgeStatus, Radio, Subtitle2Stronger, Table, TableBody, TableCell, TableCellLayout, TableColumnSizingOptions, TableHeader, TableHeaderCell, TableRow, teamsLightTheme, useId } from '@fluentui/react-components';
+import { Button, Checkbox, FluentProvider, Radio, Subtitle2Stronger, Table, TableBody, TableCell, TableCellLayout, TableHeader, TableHeaderCell, TableRow, teamsLightTheme, useId } from '@fluentui/react-components';
 import { IDataGridProps } from "../types/IDataGridProps";
 import { tryGetListValue, tryGetObjectValue } from "../utils"
-import { ArrowSortDownFilled, ArrowSortFilled, ArrowSortUpFilled, EditRegular } from "@fluentui/react-icons";
+import { ArrowSortDownFilled, ArrowSortFilled, ArrowSortUpFilled } from "@fluentui/react-icons";
 import { useHeaderCellStyle, useHeaderRowStyle } from "../styles";
 import { HeaderPopover } from "./HeaderPopover";
 import { Pagination } from "./Pagination";

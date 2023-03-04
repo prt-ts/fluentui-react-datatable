@@ -31,8 +31,8 @@ export const Pagination: React.FunctionComponent<{
             <Button shape="circular" className={paginationStyle.pageBtn}>
                 5
             </Button>
-            <Button shape="circular" className={paginationStyle.pageBtn} icon={<NextRegular />} /> 
             <Button shape="circular" className={paginationStyle.pageBtn} icon={<ArrowNextFilled />} /> 
+            <Button shape="circular" className={paginationStyle.pageBtn} icon={<NextRegular />} /> 
         </div>
     )
 } 

@@ -1,17 +1,20 @@
 import * as React from 'react'
-import { storiesOf } from "@storybook/react"
-
 import { FluentUIReactTable } from "../index"
 import { columns, items } from './data';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-const storeies = storiesOf("DataTable Test", module);
+export default {
+    title: 'Fluent UI DataTable',
+    component: FluentUIReactTable,
+} as ComponentMeta<typeof FluentUIReactTable>;
 
-storeies.add("DataTable", () => {
-    return (<FluentUIReactTable 
-        gridName='ABC' 
-        gridPrimaryField='file.label' 
-        items={items} 
-        columns={columns} 
-        selectionMode={"multiple"}
-    />)
-});
+const Template: ComponentStory<typeof FluentUIReactTable> = (args) => <FluentUIReactTable {...args} />;
+
+export const DefaultExample = Template.bind({});
+
+DefaultExample.args = {
+    gridName: 'ABC',
+    gridPrimaryField: 'file.label',
+    items: [...items],
+    columns: [...columns]
+};

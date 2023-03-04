@@ -17,9 +17,17 @@ export const tryGetObjectValue = (fieldName: string | undefined, item: any) => {
     return item[props[i]];
 }
 
-export const tryGetListValue = (fieldName: string, items: any[] | never[] | undefined) : any[] | never[] | undefined => {
+export const tryGetListValue = (fieldName: string, items: any[] | never[] | undefined): any[] | never[] | undefined => {
     if (!fieldName)
         return items;
 
     return items?.map(item => tryGetObjectValue(fieldName, item))
 }
+
+export const onlyUnique = (value: any, index: number, self: any) => {
+    return self.indexOf(value) === index;
+} 
+
+export const range = (from: number, to: number, step: number = 1) =>
+    [...Array(Math.floor((to - from) / step) + 1)]?.map((_, i) => from + i * step);
+

@@ -52,4 +52,7 @@ export interface IDataGridProps {
      */
     actionConfig? : IDefaultActionConfig | undefined;
 
+
+    pageSize? : number;
+
 }

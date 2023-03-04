@@ -1,1 +1,1 @@
-export * from "./FluentUIReactTable";
+export * from "./FluentUIReactTable"; 

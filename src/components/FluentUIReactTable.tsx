@@ -1,6 +1,10 @@
-import * as React from "react"; 
-import { Avatar, FluentProvider, PresenceBadgeStatus, Table, TableBody, TableCell, TableCellLayout, TableHeader, TableHeaderCell, TableRow, teamsLightTheme } from '@fluentui/react-components';
+import * as React from "react";
+import { Avatar, Badge, Button, Checkbox, FluentProvider, Popover, PopoverSurface, PopoverTrigger, PresenceBadgeStatus, Radio, Subtitle2Stronger, Table, TableBody, TableCell, TableCellLayout, TableColumnSizingOptions, TableHeader, TableHeaderCell, TableRow, teamsLightTheme, useId } from '@fluentui/react-components';
 import { IDataGridProps } from "../types/IDataGridProps";
+import { tryGetListValue, tryGetObjectValue } from "../utils"
+import { ArrowSortDownFilled, ArrowSortFilled, ArrowSortUpFilled, EditRegular } from "@fluentui/react-icons";
+import { useHeaderCellStyle, useHeaderRowStyle } from "../styles";
+import { HeaderPopover } from "./HeaderPopover";
 
 export const FluentUIReactTable: React.FunctionComponent<IDataGridProps> = (props) => {
     return (
@@ -13,52 +17,92 @@ export const FluentUIReactTable: React.FunctionComponent<IDataGridProps> = (prop
 }
 
 const FluentUIReactTableContainer: React.FunctionComponent<IDataGridProps> = ({
-    columns, items
+    gridName, gridPrimaryField, columns, items, selectionMode
 }) => {
+    const headerCellClasses = useHeaderCellStyle();
+    const headerRowStyle = useHeaderRowStyle();
+    const radioName = useId("radio");
+
+    const [selectedValues, setSelectedValues] = React.useState<any[]>([]);
+
+    const handleSelectionChange = React.useCallback((value: any[], isSelected: boolean | "mixed" = true) => {
+        console.log(value, isSelected);
+        if (selectionMode === "single") {
+            setSelectedValues([...value]);
+        } else {
+            setSelectedValues(sValue => {
+                if(isSelected){
+                    return [...sValue, ...value]
+                }
+                
+                return [...sValue?.filter(s => !value?.includes(s))]
+                
+            });
+        }
+
+    }, [selectionMode, selectedValues]);
+
     return (
-        <Table arial-label="Default table">
-            <TableHeader>
-                <TableRow>
-                    {columns.map((column) => (
-                        <TableHeaderCell key={column.fieldName}>
-                            {column.headerLabel}
-                        </TableHeaderCell>
-                    ))}
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {items?.map((item) => (
-                    <TableRow key={item.file.label}>
-                        <TableCell>
-                            <TableCellLayout media={item.file.icon}>
-                                {item.file.label}
-                            </TableCellLayout>
-                        </TableCell>
-                        <TableCell>
-                            <TableCellLayout
-                                media={
-                                    <Avatar
-                                        aria-label={item.author.label}
-                                        name={item.author.label}
-                                        badge={{
-                                            status: item.author.status as PresenceBadgeStatus,
-                                        }}
-                                    />
-                                }
-                            >
-                                {item.author.label}
-                            </TableCellLayout>
-                        </TableCell>
-                        <TableCell>{item.lastUpdated.label}</TableCell>
-                        <TableCell>
-                            <TableCellLayout media={item.lastUpdate.icon}>
-                                {item.lastUpdate.label}
-                            </TableCellLayout>
-                        </TableCell>
+        <div>
+            <Table arial-label={gridName} >
+                <TableHeader>
+                    <TableRow className={headerRowStyle.root}>
+                        {(selectionMode !== "none") ?
+                            <TableHeaderCell className={headerCellClasses.rowSelectCell}>
+                                {selectionMode === "single" ?
+                                    <></>
+                                    : <Checkbox 
+                                        onChange={(_, data) => handleSelectionChange(tryGetListValue(gridPrimaryField, items) as any[], data.checked)} />}
+                            </TableHeaderCell>
+                            : <></>
+                        }
+                        {columns.map((column) => (
+                            <TableHeaderCell key={column.fieldName} as="th" button={"div"}>
+                                <div className={headerCellClasses.root}>
+
+                                    <Button
+                                        aria-label="Sort Column"
+                                        size='small'
+                                        appearance="transparent"
+                                        icon={!column?.isSorted ? <ArrowSortFilled /> : (column.isSortedDescending ? <ArrowSortDownFilled /> : <ArrowSortUpFilled />)}>
+                                        <Subtitle2Stronger className={headerCellClasses.headerLable}>{column.headerLabel}</Subtitle2Stronger>
+                                    </Button>
+
+                                    <HeaderPopover />
+                                </div>
+                            </TableHeaderCell>
+                        ))}
                     </TableRow>
-                ))}
-            </TableBody>
-        </Table>
+                </TableHeader>
+                <TableBody>
+                    {items?.map((item: any, index: number) => (
+                        <TableRow key={index}>
+                            {(selectionMode !== "none") ?
+                                <TableCell>
+                                    {selectionMode === "single" ?
+                                        <Radio
+                                            name={radioName}
+                                            value={tryGetObjectValue(gridPrimaryField, item)}
+                                            onChange={(_, data) => handleSelectionChange([data.value])}
+                                        />
+                                        : <Checkbox
+                                            checked={selectedValues?.includes(tryGetObjectValue(gridPrimaryField, item))}
+                                            onChange={(_, data) => handleSelectionChange([tryGetObjectValue(gridPrimaryField, item)], data.checked)} />}
+                                </TableCell>
+                                : <></>
+                            }
+                            {columns.map((column, index) => (
+                                <TableCell key={column.fieldName + "_" + index}>
+                                    <TableCellLayout media={item.file.icon}>
+                                        {tryGetObjectValue(column.fieldName, item)}
+                                    </TableCellLayout>
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </div>
     )
 }
- 
+

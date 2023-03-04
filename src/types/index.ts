@@ -1,3 +1,3 @@
-export { IColumn } from "./IColumn";
-export { IDataGridProps } from "./IDataGridProps";
-export { IDefaultActionConfig } from "./DefaultActionConfig";
+export * from "./IColumn";
+export * from "./IDataGridProps";
+export * from "./DefaultActionConfig";

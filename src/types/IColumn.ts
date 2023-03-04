@@ -1,6 +1,6 @@
 import { LogicalExpression } from "@prt-ts/filter-expreression-eval";
 
-interface IColumn {
+export interface IColumn {
     /**
      * propery of the object in the data list
      * -- must be provided
@@ -103,6 +103,4 @@ interface IColumn {
      */
     disableColumnHideShow? : boolean | undefined;
      
-}
-
-export { IColumn }
+} 

@@ -1,4 +1,4 @@
-interface IDefaultActionConfig {
+export interface IDefaultActionConfig {
     /**
      * disable export to excel feature
      * -- default false
@@ -29,6 +29,4 @@ interface IDefaultActionConfig {
      */
     disableGridColumnHideShow? : boolean | undefined;
 
-}
-
-export { IDefaultActionConfig }
+} 

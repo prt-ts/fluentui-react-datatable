@@ -1,16 +1,19 @@
 {
   "name": "@prt-ts/fluentui-react-datatable",
-  "version": "1.0.0-alpha-0.0-build-0.4",
+  "version": "1.0.0-alpha-0.0-build-0.6",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
+  "type": "commonjs",
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "build": "rollup -c"
+    "build": "del -f dist && rollup -c"
   },
   "keywords": [],
   "author": "",

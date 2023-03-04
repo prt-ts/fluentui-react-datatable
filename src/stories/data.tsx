@@ -3,10 +3,11 @@ import * as React from "react";
 import { IColumn } from "../types/IColumn";
 
 const columns : IColumn[] = [
-    { fieldName: "file", headerLabel: "File" },
-    { fieldName: "author", headerLabel: "Author" },
-    { fieldName: "lastUpdated", headerLabel: "Last updated" },
-    { fieldName: "lastUpdate", headerLabel: "Last update" },
+    { fieldName: "file.label", headerLabel: "File", isSorted : true, isSortedDescending : true },
+    { fieldName: "author.label", headerLabel: "Author", isSorted : true, isSortedDescending : false },
+    { fieldName: "lastUpdated.label", headerLabel: "Last updated" },
+    { fieldName: "lastUpdate.label", headerLabel: "Last update" },
+    { fieldName: "test.[0].label", headerLabel: "Another Header" },
   ];
   
   const items = [
@@ -18,6 +19,12 @@ const columns : IColumn[] = [
             label: "You edited this",
             icon: <EditRegular />,
         },
+        test : [
+            {
+                label: "You edited this",
+                icon: <EditRegular />,
+            }
+        ]
     },
     {
         file: { label: "Thursday presentation", icon: <FolderRegular /> },

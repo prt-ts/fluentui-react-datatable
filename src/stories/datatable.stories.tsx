@@ -7,5 +7,11 @@ import { columns, items } from './data';
 const storeies = storiesOf("DataTable Test", module);
 
 storeies.add("DataTable", () => {
-    return (<FluentUIReactTable gridName='ABC' gridPrimaryField='id' items={items} columns={columns}/>)
+    return (<FluentUIReactTable 
+        gridName='ABC' 
+        gridPrimaryField='file.label' 
+        items={items} 
+        columns={columns} 
+        selectionMode={"multiple"}
+    />)
 });

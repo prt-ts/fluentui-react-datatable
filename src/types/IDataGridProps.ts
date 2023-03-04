@@ -1,7 +1,7 @@
 import { IDefaultActionConfig } from "./DefaultActionConfig";
 import { IColumn } from "./IColumn";
 
-interface IDataGridProps {
+export interface IDataGridProps {
  
     /**
      * Unique Name of the Grid 
@@ -53,5 +53,3 @@ interface IDataGridProps {
     actionConfig? : IDefaultActionConfig | undefined;
 
 }
-
-export { IDataGridProps }

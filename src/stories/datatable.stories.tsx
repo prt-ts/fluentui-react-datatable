@@ -13,7 +13,7 @@ const Template: ComponentStory<typeof FluentUIReactTable> = (args) => <FluentUIR
 export const DefaultExample = Template.bind({});
 
 DefaultExample.args = {
-    gridName: 'ABC',
+    gridName: 'Example Grid',
     gridPrimaryField: 'file.label',
     items: [...items],
     columns: [...columns]

@@ -5,14 +5,14 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
-  "type": "commonjs",
+  "type": "module",
   "files": [
     "/dist"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "start-storybook -p 6006", 
-    "build-storybook": "build-storybook -o docs-build -s ./stories/assets",
+    "build-storybook": "build-storybook -o docs-build -s ./src/stories/assets",
     "build": "rollup -c"
   },
   "keywords": ["datatable", "fluentui", "fluentui-datatable", "grid"],

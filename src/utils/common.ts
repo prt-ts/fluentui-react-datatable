@@ -1,4 +1,4 @@
-export const tryGetObjectValue = (fieldName: string, item: any) => {
+export const tryGetObjectValue = (fieldName: string | undefined, item: any) => {
     if (!fieldName)
         return item;
 

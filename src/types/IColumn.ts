@@ -13,6 +13,11 @@ export interface IColumn {
      */
     headerLabel: string;
 
+     /**
+     * any media icon for column
+     */
+    mediaFieldName?: string;
+
     /**
      * data type of the field in object
      * -- default is text

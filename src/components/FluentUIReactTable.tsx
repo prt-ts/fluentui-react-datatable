@@ -5,6 +5,8 @@ import { tryGetListValue, tryGetObjectValue } from "../utils"
 import { ArrowSortDownFilled, ArrowSortFilled, ArrowSortUpFilled, EditRegular } from "@fluentui/react-icons";
 import { useHeaderCellStyle, useHeaderRowStyle } from "../styles";
 import { HeaderPopover } from "./HeaderPopover";
+import { Pagination } from "./Pagination";
+import { GlobalSearch } from "./GlobalSearch";
 
 export const FluentUIReactTable: React.FunctionComponent<IDataGridProps> = (props) => {
     return (
@@ -31,12 +33,12 @@ const FluentUIReactTableContainer: React.FunctionComponent<IDataGridProps> = ({
             setSelectedValues([...value]);
         } else {
             setSelectedValues(sValue => {
-                if(isSelected){
+                if (isSelected) {
                     return [...sValue, ...value]
                 }
-                
+
                 return [...sValue?.filter(s => !value?.includes(s))]
-                
+
             });
         }
 
@@ -44,6 +46,7 @@ const FluentUIReactTableContainer: React.FunctionComponent<IDataGridProps> = ({
 
     return (
         <div>
+            <GlobalSearch onSearchInputChange={(searchTerm) => console.log(searchTerm)}/>
             <Table arial-label={gridName} >
                 <TableHeader>
                     <TableRow className={headerRowStyle.root}>
@@ -51,7 +54,7 @@ const FluentUIReactTableContainer: React.FunctionComponent<IDataGridProps> = ({
                             <TableHeaderCell className={headerCellClasses.rowSelectCell}>
                                 {selectionMode === "single" ?
                                     <></>
-                                    : <Checkbox 
+                                    : <Checkbox
                                         onChange={(_, data) => handleSelectionChange(tryGetListValue(gridPrimaryField, items) as any[], data.checked)} />}
                             </TableHeaderCell>
                             : <></>
@@ -62,13 +65,13 @@ const FluentUIReactTableContainer: React.FunctionComponent<IDataGridProps> = ({
 
                                     <Button
                                         aria-label="Sort Column"
-                                        size='small'
+                                        size='medium'
                                         appearance="transparent"
                                         icon={!column?.isSorted ? <ArrowSortFilled /> : (column.isSortedDescending ? <ArrowSortDownFilled /> : <ArrowSortUpFilled />)}>
                                         <Subtitle2Stronger className={headerCellClasses.headerLable}>{column.headerLabel}</Subtitle2Stronger>
                                     </Button>
 
-                                    <HeaderPopover />
+                                    <HeaderPopover column={column}/>
                                 </div>
                             </TableHeaderCell>
                         ))}
@@ -93,7 +96,7 @@ const FluentUIReactTableContainer: React.FunctionComponent<IDataGridProps> = ({
                             }
                             {columns.map((column, index) => (
                                 <TableCell key={column.fieldName + "_" + index}>
-                                    <TableCellLayout media={item.file.icon}>
+                                    <TableCellLayout media={ column.mediaFieldName ? tryGetObjectValue(column.mediaFieldName, item) : undefined}>
                                         {tryGetObjectValue(column.fieldName, item)}
                                     </TableCellLayout>
                                 </TableCell>
@@ -102,6 +105,7 @@ const FluentUIReactTableContainer: React.FunctionComponent<IDataGridProps> = ({
                     ))}
                 </TableBody>
             </Table>
+            <Pagination totalNumberOfPages={10} currentPage={2} onPageChange={(cPage) => console.log(cPage)}/>
         </div>
     )
 }

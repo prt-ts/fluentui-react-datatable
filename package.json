@@ -1,6 +1,6 @@
 {
   "name": "@prt-ts/fluentui-react-datatable",
-  "version": "1.0.0-alpha-0.0-build-0.6",
+  "version": "1.0.0-alpha-0.0-build-0.7",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",

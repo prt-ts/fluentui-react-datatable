@@ -26,6 +26,7 @@
   "dependencies": {
     "@prt-ts/export-helpers": "^1.0.0",
     "@prt-ts/filter-expreression-eval": "^1.0.0-rc-1.0.6",
+    "idb": "^7.1.1",
     "observable-hooks": "^4.2.1",
     "rxjs": "^7.8.0"
   },

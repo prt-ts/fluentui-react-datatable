@@ -40,6 +40,21 @@ export const GridLayout : React.FunctionComponent<IDataGridProps> = (props) => {
 
     }, [props.selectionMode, selectedValues]);
 
+    const handleSortColumn = React.useCallback((column : IColumn) => {
+        const newColumn = columns?.map(col => {
+            if(col.fieldName == column.fieldName){
+                col.isSorted = true,
+                col.isSortedDescending = !col.isSortedDescending;
+            }else{
+                col.isSorted = false;
+                col.isSortedDescending= false;
+            }
+
+            return col;
+        })
+        columns$?.next(newColumn)
+    }, [columns]);
+
     return (
         <div>
             <GlobalSearch />
@@ -63,7 +78,9 @@ export const GridLayout : React.FunctionComponent<IDataGridProps> = (props) => {
                                         aria-label="Sort Column"
                                         size='medium'
                                         appearance="transparent"
-                                        icon={!column?.isSorted ? <ArrowSortFilled /> : (column.isSortedDescending ? <ArrowSortDownFilled /> : <ArrowSortUpFilled />)}>
+                                        icon={!column?.isSorted ? <ArrowSortFilled /> : (column.isSortedDescending ? <ArrowSortDownFilled /> : <ArrowSortUpFilled />)}
+                                        onClick={() => handleSortColumn(column)}
+                                        >
                                         <Subtitle2Stronger className={headerCellClasses.headerLable}>{column.headerLabel}</Subtitle2Stronger>
                                     </Button>
 
@@ -81,7 +98,7 @@ export const GridLayout : React.FunctionComponent<IDataGridProps> = (props) => {
                                     {props.selectionMode === "single" ?
                                         <Radio
                                             name={radioName}
-                                            value={tryGetObjectValue(props.gridPrimaryField, item)}
+                                            value={tryGetObjectValue(props.gridPrimaryField, item)} 
                                             onChange={(_, data) => handleSelectionChange([data.value])}
                                         />
                                         : <Checkbox

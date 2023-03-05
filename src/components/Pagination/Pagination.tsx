@@ -6,6 +6,7 @@ import { BehaviorSubject, combineLatestWith, map, Observable } from 'rxjs';
 import { getPageSelectionOptions } from '../../helpers';
 import { useDataTableGrid } from '../../hooks';
 import { usePaginationStyle } from '../../styles';
+import { IColumn } from '../../types';
 
 export const Pagination: React.FunctionComponent<{
 }> = ({ }) => {
@@ -16,8 +17,8 @@ export const Pagination: React.FunctionComponent<{
     const { filteredItems$, pageSize$, currentPage$ } = useDataTableGrid();
     const currentPage = useObservableState(currentPage$ as BehaviorSubject<number>, 1);
     const pageOptions$ = React.useMemo(() => pageSize$?.pipe(
-        combineLatestWith(currentPage$ as BehaviorSubject<number>, filteredItems$ as Observable<any[]>),
-        map(([pSize, cPage, filteredItems]) => {
+        combineLatestWith(currentPage$ as BehaviorSubject<number>, filteredItems$ as Observable<readonly [any[], IColumn[]]>),
+        map(([pSize, cPage, [filteredItems, columns]]) => {
             const totalNumberOfPages = filteredItems?.length > 0 ? Math.ceil(filteredItems.length / pSize) : 1;
             const pageOptions = getPageSelectionOptions(cPage, totalNumberOfPages);
             return [pageOptions, totalNumberOfPages] as const;

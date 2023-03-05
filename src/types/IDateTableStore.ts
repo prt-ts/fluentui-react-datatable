@@ -11,7 +11,7 @@ export interface IDataTableStore {
     currentPage$?: BehaviorSubject<number>;
         
     items$?: BehaviorSubject<any[]>;
-    filteredItems$?: Observable<any[]>;
-    sortedItems$?: Observable<any[]>;
+    filteredItems$?: Observable<readonly [any[], IColumn[]]>;
+    sortedItems$?: Observable<readonly [any[], IColumn[]]>;
     pagedItems$?: Observable<any[]>;
 }

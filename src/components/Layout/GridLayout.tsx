@@ -77,7 +77,7 @@ export const GridLayout : React.FunctionComponent<IDataGridProps> = (props) => {
                     {pagedItems?.map((item: any, index: number) => (
                         <TableRow key={index}>
                             {(props.selectionMode !== "none") ?
-                                <TableCell>
+                                <TableCell as="td">
                                     {props.selectionMode === "single" ?
                                         <Radio
                                             name={radioName}
@@ -101,7 +101,7 @@ export const GridLayout : React.FunctionComponent<IDataGridProps> = (props) => {
                     ))}
                 </TableBody>
             </Table>
-            <Pagination totalNumberOfPages={10} currentPage={2} onPageChange={(cPage) => console.log(cPage)} />
+            <Pagination />
         </div>
     )
 }

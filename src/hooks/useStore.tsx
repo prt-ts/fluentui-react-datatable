@@ -73,7 +73,7 @@ export const useTableStore = () => {
         combineLatestWith(pageSize$, currentPage$),
         map(([[sortedItems, columns], pSize, cPage]) => {
             const calculatedPageSize : number = pSize ?? DEFAULT_PAGE_SIZE;
-            const firstIndex = (cPage - 1) * pSize;
+            const firstIndex : number = (cPage - 1) * pSize;
             const lastIndex =
                 calculatedPageSize > sortedItems?.length
                     ? sortedItems.length

@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Button, Checkbox, Radio, Subtitle2Stronger, Table, TableBody, TableCell, TableCellLayout, TableHeader, TableHeaderCell, TableRow, useId } from "@fluentui/react-components";
+import { Button, Checkbox, Subtitle2Stronger, Table, TableBody, TableHeader, TableHeaderCell, TableRow, useId } from "@fluentui/react-components";
 import { useHeaderCellStyle, useHeaderRowStyle } from "../../styles";
-import { IColumn, IDataGridProps } from "../../types";
+import { IColumn, IDataGridProps, IGroup } from "../../types";
 import { ArrowSortFilled, ArrowSortDownFilled, ArrowSortUpFilled } from "@fluentui/react-icons";
 import { tryGetListValue, tryGetObjectValue } from "../../utils";
 import { GlobalSearch } from "../GlobalSearch";
@@ -10,44 +10,38 @@ import { Pagination } from "../Pagination";
 import { useDataTableGrid, useInitializeStore } from "../../hooks";
 import { useObservableState } from "observable-hooks";
 import { BehaviorSubject, Observable } from "rxjs";
+import { DataTableGroupedPage, DataTablePage } from "../Table";
 
-export const GridLayout : React.FunctionComponent<IDataGridProps> = (props) => {
+export const GridLayout: React.FunctionComponent<IDataGridProps> = (props) => {
+    const {selectionMode, gridPrimaryField} = props;
     useInitializeStore(props);
-    const { columns$, pagedItems$ } = useDataTableGrid();
+    const { columns$, groups$, pagedItems$, selectedItems$ } = useDataTableGrid();
     const headerCellClasses = useHeaderCellStyle();
-    const headerRowStyle = useHeaderRowStyle();
-    const radioName = useId("radio");
-
-    const [selectedValues, setSelectedValues] = React.useState<any[]>([]);
+    const headerRowStyle = useHeaderRowStyle(); 
+    const selectedValues = useObservableState(selectedItems$ as Observable<any[]>, [])
 
     const pagedItems = useObservableState(pagedItems$ as Observable<any[]>, []);
     const columns = useObservableState(columns$ as BehaviorSubject<IColumn[]>, []);
+    const groups = useObservableState(groups$ as BehaviorSubject<IGroup[]>, []);
 
     const handleSelectionChange = React.useCallback((value: any[], isSelected: boolean | "mixed" = true) => {
         console.log(value, isSelected);
-        if (props.selectionMode === "single") {
-            setSelectedValues([...value]);
+        if (selectionMode === "single") {
+            selectedItems$?.next([...value]);
         } else {
-            setSelectedValues(sValue => {
-                if (isSelected) {
-                    return [...sValue, ...value]
-                }
-
-                return [...sValue?.filter(s => !value?.includes(s))]
-
-            });
+            const newSelectedItems = isSelected ? [...selectedValues, ...value] :  [...selectedValues?.filter(s => !value?.includes(s))]
+            selectedItems$?.next(newSelectedItems);
         }
+    }, [selectionMode, selectedValues]);
 
-    }, [props.selectionMode, selectedValues]);
-
-    const handleSortColumn = React.useCallback((column : IColumn) => {
+    const handleSortColumn = React.useCallback((column: IColumn) => {
         const newColumn = columns?.map(col => {
-            if(col.fieldName == column.fieldName){
+            if (col.fieldName == column.fieldName) {
                 col.isSorted = true,
-                col.isSortedDescending = !col.isSortedDescending;
-            }else{
+                    col.isSortedDescending = !col.isSortedDescending;
+            } else {
                 col.isSorted = false;
-                col.isSortedDescending= false;
+                col.isSortedDescending = false;
             }
 
             return col;
@@ -55,18 +49,33 @@ export const GridLayout : React.FunctionComponent<IDataGridProps> = (props) => {
         columns$?.next(newColumn)
     }, [columns]);
 
+    const isChecked = React.useMemo((): boolean | "mixed" => {
+        const isAllSelected = [...pagedItems]
+            ?.every((x) => selectedValues?.includes(tryGetObjectValue(gridPrimaryField, x)));
+
+        if (!isAllSelected) {
+            const isPartialSelected = [...pagedItems] 
+                ?.some((x) => selectedValues?.includes(tryGetObjectValue(gridPrimaryField, x)));
+
+            return isPartialSelected ? "mixed" : false;
+        }
+
+        return true;
+    }, [pagedItems, selectedValues, gridPrimaryField]);
+
     return (
         <div>
             <GlobalSearch />
             <Table arial-label={props.gridName} >
                 <TableHeader>
                     <TableRow className={headerRowStyle.root}>
-                        {(props.selectionMode !== "none") ?
+                        {(selectionMode !== "none") ?
                             <TableHeaderCell className={headerCellClasses.rowSelectCell}>
-                                {props.selectionMode === "single" ?
+                                {selectionMode === "single" ?
                                     <></>
                                     : <Checkbox
-                                        onChange={(_, data) => handleSelectionChange(tryGetListValue(props.gridPrimaryField, props.items) as any[], data.checked)} />}
+                                        checked={isChecked} 
+                                        onChange={(_, data) => handleSelectionChange(tryGetListValue(gridPrimaryField, pagedItems) as any[], data.checked)} />}
                             </TableHeaderCell>
                             : <></>
                         }
@@ -80,7 +89,7 @@ export const GridLayout : React.FunctionComponent<IDataGridProps> = (props) => {
                                         appearance="transparent"
                                         icon={!column?.isSorted ? <ArrowSortFilled /> : (column.isSortedDescending ? <ArrowSortDownFilled /> : <ArrowSortUpFilled />)}
                                         onClick={() => handleSortColumn(column)}
-                                        >
+                                    >
                                         <Subtitle2Stronger className={headerCellClasses.headerLable}>{column.headerLabel}</Subtitle2Stronger>
                                     </Button>
 
@@ -91,31 +100,27 @@ export const GridLayout : React.FunctionComponent<IDataGridProps> = (props) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {pagedItems?.map((item: any, index: number) => (
-                        <TableRow key={index}>
-                            {(props.selectionMode !== "none") ?
-                                <TableCell as="td">
-                                    {props.selectionMode === "single" ?
-                                        <Radio
-                                            name={radioName}
-                                            value={tryGetObjectValue(props.gridPrimaryField, item)} 
-                                            onChange={(_, data) => handleSelectionChange([data.value])}
-                                        />
-                                        : <Checkbox
-                                            checked={selectedValues?.includes(tryGetObjectValue(props.gridPrimaryField, item))}
-                                            onChange={(_, data) => handleSelectionChange([tryGetObjectValue(props.gridPrimaryField, item)], data.checked)} />}
-                                </TableCell>
-                                : <></>
-                            }
-                            {columns.map((column, index) => (
-                                <TableCell key={column.fieldName + "_" + index}>
-                                    <TableCellLayout media={column.mediaFieldName ? tryGetObjectValue(column.mediaFieldName, item) : undefined}>
-                                        {tryGetObjectValue(column.fieldName, item)}
-                                    </TableCellLayout>
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    ))}
+                    {!groups?.length && <DataTablePage
+                        pagedItems={[...pagedItems]}
+                        columns={columns}
+                        selectionMode={selectionMode}
+                        gridPrimaryField={gridPrimaryField}
+                    />}
+                    {
+                        groups.length > 0 &&
+                        groups.map((group, index) => {
+                            return (
+                                <DataTableGroupedPage
+                                    key={index}
+                                    group={group}
+                                    columns={columns}
+                                    gridPrimaryField={gridPrimaryField}
+                                    pagedItems={pagedItems}
+                                    selectionMode={selectionMode}
+                                />
+                            );
+                        })
+                    }
                 </TableBody>
             </Table>
             <Pagination />

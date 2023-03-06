@@ -1,4 +1,4 @@
-import { IDefaultActionConfig } from "./DefaultActionConfig";
+ import { IDefaultActionConfig } from "./DefaultActionConfig";
 import { IColumn } from "./IColumn";
 
 export interface IDataGridProps {
@@ -56,3 +56,5 @@ export interface IDataGridProps {
     pageSize? : number;
 
 }
+
+export type SelectionModeType = IDataGridProps['selectionMode']

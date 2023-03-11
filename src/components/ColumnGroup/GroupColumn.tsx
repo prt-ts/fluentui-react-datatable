@@ -15,10 +15,14 @@ export const GroupColumn: React.FunctionComponent<{ column: IColumn }> = ({ colu
     const columns = useObservableState(columns$ as BehaviorSubject<IColumn[]>, []);
 
     const handleGroupColumn = React.useCallback((column: IColumn) => {
+        const lastMaxGroupOrder = Math.max.apply(Math, [
+            ...columns.map((col) => col.groupOrderNumber ?? 1),
+          ]);
+
         const newColumn = columns.map(col => {
             if (column.fieldName == col.fieldName) {
                 col.isGrouped = !col.isGrouped;
-                col.groupOrderNumber = 1;
+                col.groupOrderNumber = !col.isGrouped? lastMaxGroupOrder + 1 : 0;
             }
             return col;
         })

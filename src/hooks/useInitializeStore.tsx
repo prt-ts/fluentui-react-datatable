@@ -24,15 +24,17 @@ export const useInitializeStore = ({
   }, [pageSize]);
 
 
+  // all config will initialize at the begining only
   React.useEffect(() => {
-    gridConfig$?.next({       
-      gridName : rest?.gridName,
-      gridPrimaryField : rest?.gridPrimaryField,
-      
-      selectionMode : rest?.selectionMode ?? DefaultGridConfig.selectionMode,
-      gridMode : rest?.gridMode ?? DefaultGridConfig.gridMode, 
-      isDefaultGroupCollapsed : rest?.isDefaultGroupCollapsed ?? DefaultGridConfig.isDefaultGroupCollapsed, 
+    gridConfig$?.next({
+      gridName: rest?.gridName,
+      gridPrimaryField: rest?.gridPrimaryField,
+
+      selectionMode: rest?.selectionMode ?? DefaultGridConfig.selectionMode,
+      gridMode: rest?.gridMode ?? DefaultGridConfig.gridMode,
+      isDefaultGroupCollapsed: rest?.isDefaultGroupCollapsed ?? DefaultGridConfig.isDefaultGroupCollapsed,
+      hideColumnOnGroup: rest?.hideColumnOnGroup ?? DefaultGridConfig.hideColumnOnGroup,
     });
-  }, [rest]);
+  }, []);
 
 };

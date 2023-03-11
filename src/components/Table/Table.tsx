@@ -1,7 +1,7 @@
 import { Checkbox, Radio, TableCell, TableCellLayout, TableRow, useId } from '@fluentui/react-components'
 import { useObservableState } from 'observable-hooks'
 import * as React from 'react'
-import { useDataTableGrid } from '../../hooks'
+import { useDataTableGrid, useSelection } from '../../hooks' 
 import { DefaultGridConfig, IColumn, IGridConfig } from '../../types'
 import { tryGetObjectValue } from '../../utils'
 
@@ -10,27 +10,11 @@ export const DataTablePage: React.FunctionComponent<{
     pagedItems: any[] 
 }> = ({ columns, pagedItems }) => {
     const {gridConfig$} = useDataTableGrid();
+    const { verifySelected, handleSelectionChange } = useSelection();
     const radioName = useId("radio");
     const [selectedValues, setSelectedValues] = React.useState<any[]>([]);
 
     const gridConfig = useObservableState<IGridConfig>(gridConfig$, DefaultGridConfig);
-
-    const handleSelectionChange = React.useCallback((value: any[], isSelected: boolean | "mixed" = true) => {
-        console.log(value, isSelected);
-        if (gridConfig.selectionMode === "single") {
-            setSelectedValues([...value]);
-        } else {
-            setSelectedValues(sValue => {
-                if (isSelected) {
-                    return [...sValue, ...value]
-                }
-
-                return [...sValue?.filter(s => !value?.includes(s))]
-
-            });
-        }
-
-    }, [gridConfig.selectionMode, selectedValues]);
 
     return (
         <>
@@ -45,7 +29,7 @@ export const DataTablePage: React.FunctionComponent<{
                                     onChange={(_, data) => handleSelectionChange([data.value])}
                                 />
                                 : <Checkbox
-                                    checked={selectedValues?.includes(tryGetObjectValue(gridConfig.gridPrimaryField, item))}
+                                    checked={verifySelected(item)}
                                     onChange={(_, data) => handleSelectionChange([tryGetObjectValue(gridConfig.gridPrimaryField, item)], data.checked)} />}
                         </TableCell>
                         : <></>

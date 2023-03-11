@@ -36,7 +36,13 @@ export interface IGridConfig  {
      * If grouped, should default group collapsed
      * @default false
      */
-    isDefaultGroupCollapsed? : boolean
+    isDefaultGroupCollapsed? : boolean;
+
+    /**
+     * If grouped, Column will simply hidden in grid view
+     * @default false
+     */
+    hideColumnOnGroup? : boolean;
 
  
     /**
@@ -80,6 +86,7 @@ export const DefaultGridConfig : IGridConfig = {
     selectionMode : "multiple",
     disableGridMode : false,
 
-    isDefaultGroupCollapsed : false
+    isDefaultGroupCollapsed : false,
+    hideColumnOnGroup : false
     
 }

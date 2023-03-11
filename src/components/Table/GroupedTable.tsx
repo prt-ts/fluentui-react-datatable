@@ -3,7 +3,7 @@ import { ChevronCircleDownRegular, ChevronCircleUpRegular } from '@fluentui/reac
 import { useObservableState } from 'observable-hooks'
 import * as React from 'react'
 import { BehaviorSubject } from 'rxjs'
-import { useDataTableGrid } from '../../hooks'
+import { useDataTableGrid, useSelection } from '../../hooks' 
 import { DefaultGridConfig, IColumn, IGridConfig, IGroup } from '../../types'
 import { tryGetListValue, tryGetObjectValue } from '../../utils'
 
@@ -15,20 +15,11 @@ export const DataTableGroupedPage: React.FunctionComponent<{
 }> = ({groupKey, group, columns, pagedItems }) => {
     const radioName = useId("radio");
     const { gridConfig$, selectedItems$, groups$ } = useDataTableGrid();
+    const { handleSelectionChange } = useSelection();
     const selectedValues = useObservableState(selectedItems$ as BehaviorSubject<any[]>, []);
     const groups = useObservableState(groups$ as BehaviorSubject<IGroup[]>, []);
     const gridConfig = useObservableState<IGridConfig>(gridConfig$, DefaultGridConfig);
-
-    const handleSelectionChange = React.useCallback((value: any[], isSelected: boolean | "mixed" = true) => {
-        console.log(value, isSelected);
-        if (gridConfig.selectionMode === "single") {
-            selectedItems$?.next([...value]);
-        } else {
-            const newSelectedItems = isSelected ? [...selectedValues, ...value] : [...selectedValues?.filter(s => !value?.includes(s))]
-            selectedItems$?.next(newSelectedItems);
-        }
-    }, [gridConfig.selectionMode, selectedValues]);
-
+ 
     const groupPadding = 20 * (group?.level ?? 0);
 
     const isChecked = React.useMemo((): boolean | "mixed" => {

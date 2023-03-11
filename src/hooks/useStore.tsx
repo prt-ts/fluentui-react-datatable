@@ -96,7 +96,7 @@ export const useTableStore = () => {
             const groups = groupItems(
                 [...pagedItems],
                 [...groupedColumns],
-                true,
+                !gridConfig$.value.isDefaultGroupCollapsed,
                 undefined,
                 [...groups$.value]
             );

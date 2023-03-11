@@ -29,8 +29,9 @@ export const useInitializeStore = ({
       gridName : rest?.gridName,
       gridPrimaryField : rest?.gridPrimaryField,
       
-      selectionMode : rest?.selectionMode ?? "multiple",
-      gridMode : rest?.gridMode ?? "table", 
+      selectionMode : rest?.selectionMode ?? DefaultGridConfig.selectionMode,
+      gridMode : rest?.gridMode ?? DefaultGridConfig.gridMode, 
+      isDefaultGroupCollapsed : rest?.isDefaultGroupCollapsed ?? DefaultGridConfig.isDefaultGroupCollapsed, 
     });
   }, [rest]);
 

@@ -102,21 +102,18 @@ export const GridLayout: React.FunctionComponent<IDataGridProps> = (props) => {
                 <TableBody>
                     {!groups?.length && <DataTablePage
                         pagedItems={[...pagedItems]}
-                        columns={columns}
-                        selectionMode={selectionMode}
-                        gridPrimaryField={gridPrimaryField}
+                        columns={columns} 
                     />}
                     {
                         groups.length > 0 &&
                         groups.map((group, index) => {
                             return (
                                 <DataTableGroupedPage
-                                    key={index}
+                                    key={index + group.key}
+                                    groupKey={index + group.key}
                                     group={group}
-                                    columns={columns}
-                                    gridPrimaryField={gridPrimaryField}
-                                    pagedItems={pagedItems}
-                                    selectionMode={selectionMode}
+                                    columns={columns} 
+                                    pagedItems={pagedItems} 
                                 />
                             );
                         })

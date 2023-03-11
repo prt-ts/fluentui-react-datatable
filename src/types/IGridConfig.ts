@@ -32,6 +32,12 @@ export interface IGridConfig  {
      */
     selectionMode? : "none" | "single" | "multiple"; 
 
+    /**
+     * If grouped, should default group collapsed
+     * @default false
+     */
+    isDefaultGroupCollapsed? : boolean
+
  
     /**
      * disable export to excel feature
@@ -68,5 +74,12 @@ export interface IGridConfig  {
 
 export const DefaultGridConfig : IGridConfig = {
     gridName: "",
-    gridPrimaryField: "id"
+    gridPrimaryField: "id",
+
+    gridMode : "table",
+    selectionMode : "multiple",
+    disableGridMode : false,
+
+    isDefaultGroupCollapsed : false
+    
 }

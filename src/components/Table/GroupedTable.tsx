@@ -8,10 +8,11 @@ import { DefaultGridConfig, IColumn, IGridConfig, IGroup } from '../../types'
 import { tryGetListValue, tryGetObjectValue } from '../../utils'
 
 export const DataTableGroupedPage: React.FunctionComponent<{
+    groupKey: string,
     group: IGroup,
     columns: IColumn[]
     pagedItems: any[] 
-}> = ({ group, columns, pagedItems }) => {
+}> = ({groupKey, group, columns, pagedItems }) => {
     const radioName = useId("radio");
     const { gridConfig$, selectedItems$, groups$ } = useDataTableGrid();
     const selectedValues = useObservableState(selectedItems$ as BehaviorSubject<any[]>, []);
@@ -73,7 +74,7 @@ export const DataTableGroupedPage: React.FunctionComponent<{
 
     return (
         <>
-            <TableRow>
+            <TableRow key={groupKey}>
                 <TableCell colSpan={columns.length + 1}>
                     {(gridConfig.selectionMode !== "none") ?
                         <>
@@ -102,7 +103,8 @@ export const DataTableGroupedPage: React.FunctionComponent<{
             {
                 (!group.isCollapsed && group.children && group?.children?.length > 0) &&
                 group?.children?.map((g, index) => <DataTableGroupedPage
-                    key={index}
+                    key={index + group.key}
+                    groupKey={index + group.key}
                     group={g}
                     pagedItems={pagedItems}
                     columns={columns} 

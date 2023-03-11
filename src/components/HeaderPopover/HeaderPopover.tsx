@@ -1,8 +1,10 @@
-import { Button, Popover, PopoverSurface, PopoverTrigger, PositioningImperativeRef } from '@fluentui/react-components'
+import { Button, Divider, Popover, PopoverSurface, PopoverTrigger, PositioningImperativeRef } from '@fluentui/react-components'
 import { ChevronCircleDownRegular, ChevronCircleUpRegular, ChevronDownFilled, DoubleTapSwipeUpFilled, DrawerArrowDownloadFilled, EditRegular, GroupDismissRegular, GroupListRegular, SearchSquareRegular } from '@fluentui/react-icons'
 import * as React from 'react'
 import { IColumn } from './../../types';
 import { useHeaderPopoverStyle } from '../../styles';
+import { FilterContainer } from '../ColumnFilterTypes/FilterContainer';
+import { GroupColumn } from '../ColumnGroup/GroupColumn';
 
 export const HeaderPopover: React.FunctionComponent<{
     column: IColumn
@@ -29,16 +31,19 @@ export const HeaderPopover: React.FunctionComponent<{
                     icon={isOpen ? <ChevronCircleUpRegular /> : <ChevronCircleDownRegular />}
                 >
                     {
-                        (column.isFiltered ? <SearchSquareRegular fontSize={20}/> : <></>)
+                        (column.isFiltered ? <SearchSquareRegular fontSize={20} /> : <></>)
                     }
                     {
-                        (column.isGrouped ? <GroupListRegular fontSize={20}/> : <></>)
+                        (column.isGrouped ? <GroupListRegular fontSize={20} /> : <></>)
                     }
                 </Button>
             </PopoverTrigger>
             <PopoverSurface className={headerPopoverClasses.popoverSurface}>
-                isOpen : {isOpen}
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis consequatur maxime pariatur, magni at fugiat non officiis! Consequatur laboriosam eos voluptas doloremque? Omnis earum corporis sit velit consequuntur, quisquam voluptas.
+                {column?.disableFilter ? <></> : <FilterContainer />}
+                {column?.disableGrouping ? <></> : <>
+                    <Divider />
+                    <GroupColumn column={column} />
+                </>}
             </PopoverSurface>
         </Popover>
     )

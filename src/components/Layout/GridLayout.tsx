@@ -13,11 +13,11 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { DataTableGroupedPage, DataTablePage } from "../Table";
 
 export const GridLayout: React.FunctionComponent<IDataGridProps> = (props) => {
-    const {selectionMode, gridPrimaryField} = props;
+    const { selectionMode, gridPrimaryField } = props;
     useInitializeStore(props);
     const { columns$, groups$, pagedItems$, selectedItems$ } = useDataTableGrid();
     const headerCellClasses = useHeaderCellStyle();
-    const headerRowStyle = useHeaderRowStyle(); 
+    const headerRowStyle = useHeaderRowStyle();
     const selectedValues = useObservableState(selectedItems$ as Observable<any[]>, [])
 
     const pagedItems = useObservableState(pagedItems$ as Observable<any[]>, []);
@@ -29,7 +29,7 @@ export const GridLayout: React.FunctionComponent<IDataGridProps> = (props) => {
         if (selectionMode === "single") {
             selectedItems$?.next([...value]);
         } else {
-            const newSelectedItems = isSelected ? [...selectedValues, ...value] :  [...selectedValues?.filter(s => !value?.includes(s))]
+            const newSelectedItems = isSelected ? [...selectedValues, ...value] : [...selectedValues?.filter(s => !value?.includes(s))]
             selectedItems$?.next(newSelectedItems);
         }
     }, [selectionMode, selectedValues]);
@@ -54,7 +54,7 @@ export const GridLayout: React.FunctionComponent<IDataGridProps> = (props) => {
             ?.every((x) => selectedValues?.includes(tryGetObjectValue(gridPrimaryField, x)));
 
         if (!isAllSelected) {
-            const isPartialSelected = [...pagedItems] 
+            const isPartialSelected = [...pagedItems]
                 ?.some((x) => selectedValues?.includes(tryGetObjectValue(gridPrimaryField, x)));
 
             return isPartialSelected ? "mixed" : false;
@@ -74,27 +74,29 @@ export const GridLayout: React.FunctionComponent<IDataGridProps> = (props) => {
                                 {selectionMode === "single" ?
                                     <></>
                                     : <Checkbox
-                                        checked={isChecked} 
+                                        checked={isChecked}
                                         onChange={(_, data) => handleSelectionChange(tryGetListValue(gridPrimaryField, pagedItems) as any[], data.checked)} />}
                             </TableHeaderCell>
                             : <></>
                         }
                         {columns.map((column) => (
                             <TableHeaderCell key={column.fieldName} as="th" button={"div"}>
-                                <div className={headerCellClasses.root}>
+                                {column.disableAllActions ?
+                                    <Subtitle2Stronger className={headerCellClasses.headerLable}>{column.headerLabel}</Subtitle2Stronger> :
+                                    <div className={headerCellClasses.root}>
+                                        <Button
+                                            aria-label="Sort Column"
+                                            size='medium'
+                                            appearance="transparent"
+                                            icon={!column?.isSorted ? <ArrowSortFilled /> : (column.isSortedDescending ? <ArrowSortDownFilled /> : <ArrowSortUpFilled />)}
+                                            onClick={() => handleSortColumn(column)}
+                                        >
+                                            <Subtitle2Stronger className={headerCellClasses.headerLable}>{column.headerLabel}</Subtitle2Stronger>
+                                        </Button>
 
-                                    <Button
-                                        aria-label="Sort Column"
-                                        size='medium'
-                                        appearance="transparent"
-                                        icon={!column?.isSorted ? <ArrowSortFilled /> : (column.isSortedDescending ? <ArrowSortDownFilled /> : <ArrowSortUpFilled />)}
-                                        onClick={() => handleSortColumn(column)}
-                                    >
-                                        <Subtitle2Stronger className={headerCellClasses.headerLable}>{column.headerLabel}</Subtitle2Stronger>
-                                    </Button>
-
-                                    <HeaderPopover column={column} />
-                                </div>
+                                        {<HeaderPopover column={column} />}
+                                    </div>
+                                }
                             </TableHeaderCell>
                         ))}
                     </TableRow>
@@ -102,7 +104,7 @@ export const GridLayout: React.FunctionComponent<IDataGridProps> = (props) => {
                 <TableBody>
                     {!groups?.length && <DataTablePage
                         pagedItems={[...pagedItems]}
-                        columns={columns} 
+                        columns={columns}
                     />}
                     {
                         groups.length > 0 &&
@@ -112,8 +114,8 @@ export const GridLayout: React.FunctionComponent<IDataGridProps> = (props) => {
                                     key={index + group.key}
                                     groupKey={index + group.key}
                                     group={group}
-                                    columns={columns} 
-                                    pagedItems={pagedItems} 
+                                    columns={columns}
+                                    pagedItems={pagedItems}
                                 />
                             );
                         })

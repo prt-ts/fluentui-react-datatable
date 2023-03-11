@@ -4,10 +4,12 @@ import { BehaviorSubject, combineLatestWith, map, Observable } from "rxjs";
 import { IColumn } from "../types";
 import { useDataTableGrid } from "./useDataTable";
 import { getPageSelectionOptions } from '../helpers';
+import { DEFAULT_PAGE_SIZE } from '../utils';
 
 export const usePagination = () => {
     const { filteredItems$, pageSize$, currentPage$ } = useDataTableGrid();
     const currentPage = useObservableState(currentPage$ as BehaviorSubject<number>, 1);
+    const pageSize = useObservableState(pageSize$ as BehaviorSubject<number>, DEFAULT_PAGE_SIZE);
     const pageOptions$ = React.useMemo(() => pageSize$?.pipe(
         combineLatestWith(currentPage$ as BehaviorSubject<number>, filteredItems$ as Observable<readonly [any[], IColumn[]]>),
         map(([pSize, cPage, [filteredItems, columns]]) => {
@@ -46,5 +48,5 @@ export const usePagination = () => {
         pageSize$?.next(pageSize);
     }
 
-    return { currentPage, totalNumberOfPages, pageOptions, handlePageChanges, handlePageSizeChange }
+    return {pageSize, currentPage, totalNumberOfPages, pageOptions, handlePageChanges, handlePageSizeChange } as const;
 };

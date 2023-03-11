@@ -39,7 +39,7 @@ export const HeaderPopover: React.FunctionComponent<{
                 </Button>
             </PopoverTrigger>
             <PopoverSurface className={headerPopoverClasses.popoverSurface}>
-                {column?.disableFilter ? <></> : <FilterContainer />}
+                {column?.disableFilter ? <></> : <FilterContainer column={column}/>}
                 {column?.disableGrouping ? <></> : <>
                     <Divider />
                     <GroupColumn column={column} />

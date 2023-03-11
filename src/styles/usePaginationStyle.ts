@@ -11,5 +11,11 @@ export const usePaginationStyle = makeStyles({
         alignContent: "center",
         alignItems : "center" 
     },
+    pageSelectionWrapper: {   
+        minWidth:"3rem"
+    },
+    pageSelectionDropdown: {   
+        minWidth: "100%"
+    },
     
 });

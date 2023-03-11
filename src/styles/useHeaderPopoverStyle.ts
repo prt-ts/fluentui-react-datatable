@@ -5,6 +5,6 @@ export const useHeaderPopoverStyle = makeStyles({
         
     },
     popoverSurface : {
-        maxWidth : '200px'
+        width : '200px'
     } 
 });

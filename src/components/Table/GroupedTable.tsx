@@ -119,11 +119,13 @@ export const DataTableGroupedPage: React.FunctionComponent<{
                                                 checked={selectedValues?.includes(tryGetObjectValue(gridConfig.gridPrimaryField, item))}
                                                 onChange={(_, data) => handleSelectionChange([tryGetObjectValue(gridConfig.gridPrimaryField, item)], data.checked)} />}
                                     </TableCell>
-                                    : <></>
+                                    :<TableCell></TableCell>
                                 }
                                 {columns.map((column, index) => (
                                     <TableCell key={column.fieldName + "_" + index}>
-                                        <TableCellLayout media={column.mediaFieldName ? tryGetObjectValue(column.mediaFieldName, item) : undefined}>
+                                        <TableCellLayout 
+                                            media={column.mediaFieldName ? tryGetObjectValue(column.mediaFieldName, item) : undefined}
+                                            appearance={column.onCellActionRender ? "primary" : undefined}>
                                             {column.onRender ? column.onRender(item) : tryGetObjectValue(column.fieldName, item)}
                                         </TableCellLayout>
                                         {column.onCellActionRender ? <TableCellActions>

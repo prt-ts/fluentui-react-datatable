@@ -3,7 +3,7 @@ import { Button, Checkbox, Subtitle2Stronger, Table, TableBody, TableHeader, Tab
 import { useHeaderCellStyle, useHeaderRowStyle } from "../../styles";
 import { DefaultGridConfig, IColumn, IDataGridProps, IGridConfig, IGroup } from "../../types";
 import { ArrowSortFilled, ArrowSortDownFilled, ArrowSortUpFilled } from "@fluentui/react-icons";
-import { tryGetListValue } from "../../utils";
+import { SortSortedAscIcon, SortSortedDescIcon, SortUnsortedIcon, tryGetListValue } from "../../utils";
 import { GlobalSearch } from "../GlobalSearch";
 import { HeaderPopover } from "../HeaderPopover";
 import { Pagination } from "../Pagination";
@@ -51,7 +51,7 @@ export const GridLayout: React.FunctionComponent<IDataGridProps> = (props) => {
                                         checked={isAllPagedItemsSelected}
                                         onChange={(_, data) => handleSelectionChange(tryGetListValue(gridPrimaryField, pagedItems) as any[], data.checked)} />}
                             </TableHeaderCell>
-                            : <></>
+                            : <TableHeaderCell className={headerCellClasses.rowSelectCell}></TableHeaderCell>
                         }
                         {(visibleColumns || columns)?.map((column) => (
                             <TableHeaderCell key={column.fieldName} as="th" button={"div"}>
@@ -62,7 +62,7 @@ export const GridLayout: React.FunctionComponent<IDataGridProps> = (props) => {
                                             aria-label="Sort Column"
                                             size='medium'
                                             appearance="transparent"
-                                            icon={!column?.isSorted ? <ArrowSortFilled /> : (column.isSortedDescending ? <ArrowSortDownFilled /> : <ArrowSortUpFilled />)}
+                                            icon={!column?.isSorted ? <SortUnsortedIcon /> : (column.isSortedDescending ? <SortSortedDescIcon /> : <SortSortedAscIcon />)}
                                             onClick={() => handleSortColumn(column)}
                                         >
                                             <Subtitle2Stronger className={headerCellClasses.headerLable}>{column.headerLabel}</Subtitle2Stronger>

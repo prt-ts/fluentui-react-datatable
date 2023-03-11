@@ -1,20 +1,23 @@
 import { Checkbox, Radio, TableCell, TableCellLayout, TableRow, useId } from '@fluentui/react-components'
+import { useObservableState } from 'observable-hooks'
 import * as React from 'react'
-import { IColumn, SelectionModeType } from '../../types'
+import { useDataTableGrid } from '../../hooks'
+import { DefaultGridConfig, IColumn, IGridConfig } from '../../types'
 import { tryGetObjectValue } from '../../utils'
 
 export const DataTablePage: React.FunctionComponent<{ 
     columns: IColumn[]
-    pagedItems: any[],
-    selectionMode: SelectionModeType,
-    gridPrimaryField: string
-}> = ({ columns, selectionMode, pagedItems, gridPrimaryField }) => {
+    pagedItems: any[] 
+}> = ({ columns, pagedItems }) => {
+    const {gridConfig$} = useDataTableGrid();
     const radioName = useId("radio");
     const [selectedValues, setSelectedValues] = React.useState<any[]>([]);
 
+    const gridConfig = useObservableState<IGridConfig>(gridConfig$, DefaultGridConfig);
+
     const handleSelectionChange = React.useCallback((value: any[], isSelected: boolean | "mixed" = true) => {
         console.log(value, isSelected);
-        if (selectionMode === "single") {
+        if (gridConfig.selectionMode === "single") {
             setSelectedValues([...value]);
         } else {
             setSelectedValues(sValue => {
@@ -27,23 +30,23 @@ export const DataTablePage: React.FunctionComponent<{
             });
         }
 
-    }, [selectionMode, selectedValues]);
+    }, [gridConfig.selectionMode, selectedValues]);
 
     return (
         <>
             {pagedItems?.map((item: any, index: number) => (
                 <TableRow key={index}>
-                    {(selectionMode !== "none") ?
+                    {(gridConfig.selectionMode !== "none") ?
                         <TableCell as="td">
-                            {selectionMode === "single" ?
+                            {gridConfig.selectionMode  === "single" ?
                                 <Radio
                                     name={radioName}
-                                    value={tryGetObjectValue(gridPrimaryField, item)}
+                                    value={tryGetObjectValue(gridConfig.gridPrimaryField, item)}
                                     onChange={(_, data) => handleSelectionChange([data.value])}
                                 />
                                 : <Checkbox
-                                    checked={selectedValues?.includes(tryGetObjectValue(gridPrimaryField, item))}
-                                    onChange={(_, data) => handleSelectionChange([tryGetObjectValue(gridPrimaryField, item)], data.checked)} />}
+                                    checked={selectedValues?.includes(tryGetObjectValue(gridConfig.gridPrimaryField, item))}
+                                    onChange={(_, data) => handleSelectionChange([tryGetObjectValue(gridConfig.gridPrimaryField, item)], data.checked)} />}
                         </TableCell>
                         : <></>
                     }

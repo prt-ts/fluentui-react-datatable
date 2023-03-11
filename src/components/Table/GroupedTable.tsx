@@ -4,47 +4,46 @@ import { useObservableState } from 'observable-hooks'
 import * as React from 'react'
 import { BehaviorSubject } from 'rxjs'
 import { useDataTableGrid } from '../../hooks'
-import { IColumn, IGroup, SelectionModeType } from '../../types'
+import { DefaultGridConfig, IColumn, IGridConfig, IGroup } from '../../types'
 import { tryGetListValue, tryGetObjectValue } from '../../utils'
 
 export const DataTableGroupedPage: React.FunctionComponent<{
     group: IGroup,
     columns: IColumn[]
-    pagedItems: any[],
-    selectionMode: SelectionModeType,
-    gridPrimaryField: string
-}> = ({ group, columns, pagedItems, selectionMode, gridPrimaryField }) => {
+    pagedItems: any[] 
+}> = ({ group, columns, pagedItems }) => {
     const radioName = useId("radio");
-    const { selectedItems$, groups$ } = useDataTableGrid();
+    const { gridConfig$, selectedItems$, groups$ } = useDataTableGrid();
     const selectedValues = useObservableState(selectedItems$ as BehaviorSubject<any[]>, []);
     const groups = useObservableState(groups$ as BehaviorSubject<IGroup[]>, []);
+    const gridConfig = useObservableState<IGridConfig>(gridConfig$, DefaultGridConfig);
 
     const handleSelectionChange = React.useCallback((value: any[], isSelected: boolean | "mixed" = true) => {
         console.log(value, isSelected);
-        if (selectionMode === "single") {
+        if (gridConfig.selectionMode === "single") {
             selectedItems$?.next([...value]);
         } else {
             const newSelectedItems = isSelected ? [...selectedValues, ...value] : [...selectedValues?.filter(s => !value?.includes(s))]
             selectedItems$?.next(newSelectedItems);
         }
-    }, [selectionMode, selectedValues]);
+    }, [gridConfig.selectionMode, selectedValues]);
 
     const groupPadding = 20 * (group?.level ?? 0);
 
     const isChecked = React.useMemo((): boolean | "mixed" => {
         const isAllSelected = [...pagedItems]?.splice(group.startIndex, group.count)
-            ?.every((x) => selectedValues?.includes(tryGetObjectValue(gridPrimaryField, x)));
+            ?.every((x) => selectedValues?.includes(tryGetObjectValue(gridConfig.gridPrimaryField, x)));
 
         if (!isAllSelected) {
             const isPartialSelected = [...pagedItems]
                 ?.splice(group.startIndex, group.count)
-                ?.some((x) => selectedValues?.includes(tryGetObjectValue(gridPrimaryField, x)));
+                ?.some((x) => selectedValues?.includes(tryGetObjectValue(gridConfig.gridPrimaryField, x)));
 
             return isPartialSelected ? "mixed" : false;
         }
 
         return true;
-    }, [pagedItems, selectedValues, gridPrimaryField, group]);
+    }, [pagedItems, selectedValues, gridConfig.gridPrimaryField, group]);
 
     const collapseExpandGroup = (checkGroups: IGroup[], current: IGroup): IGroup[] => {
 
@@ -76,13 +75,13 @@ export const DataTableGroupedPage: React.FunctionComponent<{
         <>
             <TableRow>
                 <TableCell colSpan={columns.length + 1}>
-                    {(selectionMode !== "none") ?
+                    {(gridConfig.selectionMode !== "none") ?
                         <>
-                            {selectionMode === "single" ?
+                            {gridConfig.selectionMode === "single" ?
                                 <></>
                                 : <Checkbox
                                     checked={isChecked}
-                                    onChange={(_, data) => handleSelectionChange(tryGetListValue(gridPrimaryField, [...pagedItems]?.splice(group.startIndex, group.count)) as any[], data.checked)} />}
+                                    onChange={(_, data) => handleSelectionChange(tryGetListValue(gridConfig.gridPrimaryField, [...pagedItems]?.splice(group.startIndex, group.count)) as any[], data.checked)} />}
                         </>
                         : <></>
                     }
@@ -106,9 +105,7 @@ export const DataTableGroupedPage: React.FunctionComponent<{
                     key={index}
                     group={g}
                     pagedItems={pagedItems}
-                    columns={columns}
-                    selectionMode={selectionMode}
-                    gridPrimaryField={gridPrimaryField}
+                    columns={columns} 
                 />)
             }
             {
@@ -117,17 +114,17 @@ export const DataTableGroupedPage: React.FunctionComponent<{
                     <>
                         {
                             <TableRow key={index}>
-                                {(selectionMode !== "none") ?
+                                {(gridConfig.selectionMode !== "none") ?
                                     <TableCell key={index + "_group"} as="td">
-                                        {selectionMode === "single" ?
+                                        {gridConfig.selectionMode === "single" ?
                                             <Radio
                                                 name={radioName}
-                                                value={tryGetObjectValue(gridPrimaryField, item)}
+                                                value={tryGetObjectValue(gridConfig.gridPrimaryField, item)}
                                                 onChange={(_, data) => handleSelectionChange([data.value])}
                                             />
                                             : <Checkbox
-                                                checked={selectedValues?.includes(tryGetObjectValue(gridPrimaryField, item))}
-                                                onChange={(_, data) => handleSelectionChange([tryGetObjectValue(gridPrimaryField, item)], data.checked)} />}
+                                                checked={selectedValues?.includes(tryGetObjectValue(gridConfig.gridPrimaryField, item))}
+                                                onChange={(_, data) => handleSelectionChange([tryGetObjectValue(gridConfig.gridPrimaryField, item)], data.checked)} />}
                                     </TableCell>
                                     : <></>
                                 }

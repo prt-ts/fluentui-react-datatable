@@ -25,11 +25,12 @@ export const useInitializeStore = ({
 
 
   React.useEffect(() => {
-    gridConfig$?.next({
-      ...DefaultGridConfig,
-
+    gridConfig$?.next({       
+      gridName : rest?.gridName,
+      gridPrimaryField : rest?.gridPrimaryField,
       
-
+      selectionMode : rest?.selectionMode ?? "multiple",
+      gridMode : rest?.gridMode ?? "table", 
     });
   }, [rest]);
 

@@ -85,6 +85,11 @@ export interface IColumn {
      */
     isFiltered?: boolean | undefined;
 
+     /**
+     * set true if default filter expression is provided
+     */
+     filterType?: "text" | "number" | "date" | "multiselect";
+
     /**
      * default filter expression for the grid 
      */

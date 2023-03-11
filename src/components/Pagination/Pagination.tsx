@@ -1,12 +1,8 @@
-import { Button, Popover, PopoverSurface, PopoverTrigger, PositioningImperativeRef, Subtitle2Stronger } from '@fluentui/react-components'
-import { ArrowNextFilled, ArrowPreviousFilled, ChevronCircleDownRegular, ChevronCircleUpRegular, ChevronDownFilled, DoubleTapSwipeUpFilled, DrawerArrowDownloadFilled, EditRegular, GroupDismissRegular, GroupListRegular, NextRegular, PreviousRegular, SearchSquareRegular } from '@fluentui/react-icons'
-import { useObservableState } from 'observable-hooks';
+import { Button, Subtitle2Stronger } from '@fluentui/react-components'
+import { ArrowNextFilled, ArrowPreviousFilled, NextRegular, PreviousRegular } from '@fluentui/react-icons'
 import * as React from 'react'
-import { BehaviorSubject, combineLatestWith, map, Observable } from 'rxjs';
-import { getPageSelectionOptions } from '../../helpers';
-import { useDataTableGrid } from '../../hooks';
+import { usePagination } from '../../hooks';
 import { usePaginationStyle } from '../../styles';
-import { IColumn } from '../../types';
 
 export const Pagination: React.FunctionComponent<{
 }> = ({ }) => {
@@ -14,41 +10,7 @@ export const Pagination: React.FunctionComponent<{
     const paginationStyle = usePaginationStyle();
 
     // stores
-    const { filteredItems$, pageSize$, currentPage$ } = useDataTableGrid();
-    const currentPage = useObservableState(currentPage$ as BehaviorSubject<number>, 1);
-    const pageOptions$ = React.useMemo(() => pageSize$?.pipe(
-        combineLatestWith(currentPage$ as BehaviorSubject<number>, filteredItems$ as Observable<readonly [any[], IColumn[]]>),
-        map(([pSize, cPage, [filteredItems, columns]]) => {
-            const totalNumberOfPages = filteredItems?.length > 0 ? Math.ceil(filteredItems.length / pSize) : 1;
-            const pageOptions = getPageSelectionOptions(cPage, totalNumberOfPages);
-            return [pageOptions, totalNumberOfPages] as const;
-        })
-    ), []);
-    const [pageOptions, totalNumberOfPages] = useObservableState(pageOptions$ as Observable<readonly [number[], number]>, [[1], 1]);
-
-
-    const handlePageChanges = (action: "first" | 'previous' | "next" | "last" | "current", pageNumber: number) => {
-        let nextPage = pageNumber ?? 1;
-        switch (action) {
-
-            case 'previous':
-                nextPage = pageNumber <= 1 ? 1 : pageNumber;
-                break;
-
-            case 'next':
-                nextPage = pageNumber > totalNumberOfPages ? totalNumberOfPages : pageNumber;
-                break;
-
-            case 'first':
-            case 'last':
-            case 'current':
-            default:
-                nextPage = pageNumber;
-                break;
-        }
-
-        currentPage$?.next(nextPage);
-    }
+    const { currentPage, totalNumberOfPages, pageOptions, handlePageChanges } = usePagination();
 
 
     return (

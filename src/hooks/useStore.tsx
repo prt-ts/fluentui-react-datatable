@@ -99,9 +99,7 @@ export const useTableStore = () => {
                 !gridConfig$.value.isDefaultGroupCollapsed,
                 undefined,
                 [...groups$.value]
-            );
-
-            console.log(groups, groups$.value)
+            );  
             groups$.next(groups);
             return pagedItems;
         }),

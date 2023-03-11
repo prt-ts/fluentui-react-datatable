@@ -5,7 +5,7 @@ import { tryGetObjectValue } from "../utils";
 function evaluateLogicalExpression(
     expr: LogicalExpression,
     obj: Object
-): boolean {
+): boolean { 
     const { condition, expressions } = expr;
     const fn = condition === "and" ? expressions.every : expressions.some;
     return fn.call(expressions, (expr: any) => {
@@ -64,9 +64,9 @@ export function buildExpression(
     currentExpession: Expression
 ): LogicalExpression {
     if ((currentExpession as LogicalExpression)?.condition) {
-        console.log("Logical Expression");
+       // console.log("Logical Expression");
     } else {
-        console.log("Basic Expression");
+       // console.log("Basic Expression");
         currentExpession = currentExpession as BasicExpression;
         const existingExpression = expression?.expressions?.filter(
             (exp: any) => {
@@ -154,6 +154,7 @@ export function filterGrid(items: any[], searchTerm: string, columns: IColumn[])
         );
     }
 
+    //console.log("Filtering");
     return filteredItems;
 }
 

@@ -53,7 +53,7 @@ export const GridLayout: React.FunctionComponent<IDataGridProps> = (props) => {
                             </TableHeaderCell>
                             : <></>
                         }
-                        {visibleColumns?.map((column) => (
+                        {(visibleColumns || columns)?.map((column) => (
                             <TableHeaderCell key={column.fieldName} as="th" button={"div"}>
                                 {column.disableAllActions ?
                                     <Subtitle2Stronger className={headerCellClasses.headerLable}>{column.headerLabel}</Subtitle2Stronger> :
@@ -78,7 +78,7 @@ export const GridLayout: React.FunctionComponent<IDataGridProps> = (props) => {
                 <TableBody>
                     {!groups?.length && <DataTablePage
                         pagedItems={[...pagedItems]}
-                        columns={visibleColumns}
+                        columns={(visibleColumns || columns)}
                     />}
                     {
                         groups.length > 0 &&
@@ -88,7 +88,7 @@ export const GridLayout: React.FunctionComponent<IDataGridProps> = (props) => {
                                     key={index + group.key}
                                     groupKey={index + group.key}
                                     group={group}
-                                    columns={visibleColumns}
+                                    columns={(visibleColumns || columns)}
                                     pagedItems={pagedItems}
                                 />
                             );

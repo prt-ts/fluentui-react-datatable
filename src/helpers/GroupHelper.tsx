@@ -82,6 +82,7 @@ export function groupItems(
       }
     }
 
+    //console.log("Grouping")
     return groups;
   }
 

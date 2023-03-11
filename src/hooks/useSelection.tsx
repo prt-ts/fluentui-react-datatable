@@ -12,7 +12,7 @@ export const useSelection = () => {
     const pagedItems = useObservableState(pagedItems$ as Observable<any[]>, []);
 
     const handleSelectionChange = React.useCallback((value: any[], isSelected: boolean | "mixed" = true) => {
-        console.log(value, isSelected);
+        //console.log(value, isSelected);
         if (gridConfig.selectionMode === "single") {
             selectedItems$?.next([...value]);
         } else {

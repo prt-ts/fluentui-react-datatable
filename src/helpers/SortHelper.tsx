@@ -47,5 +47,7 @@ export function sortGrid(items: any[], columns: IColumn[]): any[] {
       sortColumn?.isSortedDescending
     );
   }
+
+  //console.log("Sorting");
   return items;
 }

@@ -107,5 +107,6 @@ export interface IColumn {
      * -- column can not be hidden
      */
     disableColumnHideShow? : boolean | undefined;
-     
+
+    onRender? : (item : any) => string | JSX.Element;     
 } 

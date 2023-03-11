@@ -1,10 +1,16 @@
 import * as React from "react";
 import { BehaviorSubject, combineLatestWith, map } from "rxjs";
 import { filterGrid, groupItems, sortGrid } from "../helpers";
-import { IColumn, IGroup } from "../types";
+import { DefaultGridConfig, IColumn, IGridConfig, IGroup } from "../types";
 import { DEFAULT_PAGE_SIZE } from "../utils";
 
 export const useTableStore = () => {
+
+     /**
+     * Store to hold global search term
+     * @default {}
+     */
+     const gridConfig$ = React.useMemo(() => new BehaviorSubject<IGridConfig>({...DefaultGridConfig}), []);
 
     /**
      * Store to hold global search term
@@ -90,16 +96,19 @@ export const useTableStore = () => {
             const groups = groupItems(
                 [...pagedItems],
                 [...groupedColumns],
-                true
+                true,
+                undefined,
+                [...groups$.value]
             );
 
-            console.log(groups)
+            console.log(groups, groups$.value)
             groups$.next(groups);
             return pagedItems;
         }),
     ), []);
 
     return {
+        gridConfig$,
         searchTerm$,
         columns$,
         groups$,

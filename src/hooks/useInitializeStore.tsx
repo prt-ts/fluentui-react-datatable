@@ -1,22 +1,15 @@
 import * as React from "react";
-import { IDataGridProps } from "../types";
+import { DefaultGridConfig, IDataGridProps } from "../types";
 import { DEFAULT_PAGE_SIZE } from "../utils";
 import { useDataTableGrid } from "./useDataTable";
 
-export const useInitializeStore = ({
-  gridName,
-  gridPrimaryField,
+export const useInitializeStore = ({ 
   columns = [],
-  items = [],
-  selectionMode = "multiple",
-
-  gridMode = "table",
-  disableGridMode = false,
-
-  pageSize = DEFAULT_PAGE_SIZE
-
+  items = [], 
+  pageSize = DEFAULT_PAGE_SIZE,
+  ...rest
 }: IDataGridProps) => {
-  const { items$, columns$, pageSize$ } = useDataTableGrid();
+  const {gridConfig$, items$, columns$, pageSize$ } = useDataTableGrid();
 
   React.useEffect(() => {
     columns$?.next(columns);
@@ -29,5 +22,15 @@ export const useInitializeStore = ({
   React.useEffect(() => {
     pageSize$?.next(pageSize);
   }, [pageSize]);
+
+
+  React.useEffect(() => {
+    gridConfig$?.next({
+      ...DefaultGridConfig,
+
+      
+
+    });
+  }, [rest]);
 
 };

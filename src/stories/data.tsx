@@ -8,7 +8,19 @@ const columns : IColumn[] = [
         isGrouped:true, groupOrderNumber: 1},
     { fieldName: "lastUpdated.label", headerLabel: "Last updated", isFiltered: true, isGrouped:true, groupOrderNumber: 2 },
     { fieldName: "lastUpdate.label", headerLabel: "Last update" },
-    { fieldName: "test.[0].label", headerLabel: "Another Header", isFiltered: true},
+    { 
+        fieldName: "test.[0].label", 
+        headerLabel: "Another Header", 
+        isFiltered: true, 
+        // onRender: (item): JSX.Element => {
+        //     //console.log("called", item?.[0]?.icon)
+        //     return (
+        //         <>
+        //             {item?.test?.[0]?.icon}
+        //         </>
+        //     )
+        // },
+    }
   ];
   
   const items = [

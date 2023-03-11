@@ -1,4 +1,4 @@
 export * from "./IColumn";
 export * from "./IGroup";
 export * from "./IDataGridProps";
-export * from "./DefaultActionConfig";
+export * from "./IGridConfig";

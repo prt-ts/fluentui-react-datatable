@@ -118,7 +118,7 @@ export const DataTableGroupedPage: React.FunctionComponent<{
                         {
                             <TableRow key={index}>
                                 {(selectionMode !== "none") ?
-                                    <TableCell as="td">
+                                    <TableCell key={index + "_group"} as="td">
                                         {selectionMode === "single" ?
                                             <Radio
                                                 name={radioName}
@@ -134,7 +134,7 @@ export const DataTableGroupedPage: React.FunctionComponent<{
                                 {columns.map((column, index) => (
                                     <TableCell key={column.fieldName + "_" + index}>
                                         <TableCellLayout media={column.mediaFieldName ? tryGetObjectValue(column.mediaFieldName, item) : undefined}>
-                                            {tryGetObjectValue(column.fieldName, item)}
+                                          {column.onRender ? column.onRender(item) : tryGetObjectValue(column.fieldName, item)}
                                         </TableCellLayout>
                                     </TableCell>
                                 ))}

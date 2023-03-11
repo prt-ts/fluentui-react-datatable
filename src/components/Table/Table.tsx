@@ -50,7 +50,7 @@ export const DataTablePage: React.FunctionComponent<{
                     {columns.map((column, index) => (
                         <TableCell key={column.fieldName + "_" + index}>
                             <TableCellLayout media={column.mediaFieldName ? tryGetObjectValue(column.mediaFieldName, item) : undefined}>
-                                {tryGetObjectValue(column.fieldName, item)}
+                                {column.onRender ? column.onRender(item) : tryGetObjectValue(column.fieldName, item)}
                             </TableCellLayout>
                         </TableCell>
                     ))}

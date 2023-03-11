@@ -20,7 +20,7 @@ function getGroups(
   const groups = groupedItems.reduce(
     (current: IGroup[], item: any, index: number) => {
       const currentGroup = current[current.length - 1];
-      const itemColumnValue = tryGetObjectValue(column.fieldName, item);
+      const itemColumnValue = tryGetObjectValue(column.fieldName, item) ?? "";
 
       if (
         !currentGroup ||
@@ -50,7 +50,8 @@ export function groupItems(
   sortedItems: any[],
   columns: IColumn[],
   isExpanded: boolean,
-  parentGroup?: IGroup
+  parentGroup?: IGroup,
+  existingGroups?: IGroup[],
 ): IGroup[] {
   if (columns.length) {
     //first calculate top level group
@@ -59,15 +60,24 @@ export function groupItems(
       columns?.[0],
       isExpanded,
       parentGroup
-    );
+    )?.map(newGroup => {
+      const existingGroup = existingGroups?.filter(x => x.key == newGroup.key)?.[0];
+      return {
+        ...newGroup,
+        isCollapsed : existingGroup ? existingGroup.isCollapsed : newGroup.isCollapsed
+      }
+    }); 
 
     if (columns.length > 1) {
       for (let group of groups) {
+        const existingGroup = existingGroups?.filter(x => x.key == group.key)?.[0];
+
         group.children = groupItems(
           [...sortedItems]?.splice(group.startIndex, group.count),
           [...columns]?.splice(1),
           isExpanded,
-          group
+          group,
+          existingGroup?.children
         );
       }
     }

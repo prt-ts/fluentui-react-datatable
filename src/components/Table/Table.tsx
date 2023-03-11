@@ -1,4 +1,4 @@
-import { Checkbox, Radio, TableCell, TableCellLayout, TableRow, useId } from '@fluentui/react-components'
+import { Button, Checkbox, Radio, TableCell, TableCellActions, TableCellLayout, TableRow, useId } from '@fluentui/react-components'
 import { useObservableState } from 'observable-hooks'
 import * as React from 'react'
 import { useDataTableGrid, useSelection } from '../../hooks' 
@@ -39,6 +39,9 @@ export const DataTablePage: React.FunctionComponent<{
                             <TableCellLayout media={column.mediaFieldName ? tryGetObjectValue(column.mediaFieldName, item) : undefined}>
                                 {column.onRender ? column.onRender(item) : tryGetObjectValue(column.fieldName, item)}
                             </TableCellLayout>
+                            {column.onCellActionRender ? <TableCellActions>
+                                {column.onCellActionRender(item)}
+                            </TableCellActions> : <></>}
                         </TableCell>
                     ))}
                 </TableRow>

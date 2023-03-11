@@ -1,9 +1,36 @@
-import { DocumentPdfRegular, DocumentRegular, EditRegular, FolderRegular, OpenRegular, PeopleRegular, VideoRegular } from "@fluentui/react-icons";
+import { DocumentPdfRegular, DocumentRegular, FolderRegular, OpenRegular, PeopleRegular, VideoRegular } from "@fluentui/react-icons";
 import * as React from "react";
 import { IColumn } from "../types/IColumn";
 
+import {
+    EditRegular,
+    EditFilled,
+    MoreHorizontalRegular,
+    MoreHorizontalFilled,
+    bundleIcon,
+  } from "@fluentui/react-icons";
+import { Button } from "@fluentui/react-components";
+
+const EditIcon = bundleIcon(EditFilled, EditRegular);
+const MoreHorizontalIcon = bundleIcon(
+  MoreHorizontalFilled,
+  MoreHorizontalRegular
+);
+
 const columns : IColumn[] = [
-    { fieldName: "file.label", headerLabel: "File", mediaFieldName: "file.icon", isSorted : true, isSortedDescending : true },
+    { 
+        fieldName: "file.label", 
+        headerLabel: "File", 
+        mediaFieldName: "file.icon", 
+        isSorted : true, 
+        isSortedDescending : true,
+        onCellActionRender : (item) => {
+            return <>
+              <Button icon={<EditIcon />} appearance="subtle" />
+              <Button icon={<MoreHorizontalIcon />} appearance="subtle" />
+            </>
+        }
+     },
     { fieldName: "author.label", headerLabel: "Author", isSorted : true, isSortedDescending : false, 
         isGrouped:true, groupOrderNumber: 1},
     { fieldName: "lastUpdated.label", headerLabel: "Last updated", isFiltered: true, isGrouped:true, groupOrderNumber: 2 },
@@ -12,14 +39,14 @@ const columns : IColumn[] = [
         fieldName: "test.[0].label", 
         headerLabel: "Another Header", 
         isFiltered: true, 
-        // onRender: (item): JSX.Element => {
-        //     //console.log("called", item?.[0]?.icon)
-        //     return (
-        //         <>
-        //             {item?.test?.[0]?.icon}
-        //         </>
-        //     )
-        // },
+        onRender: (item): JSX.Element => {
+            //console.log("called", item?.[0]?.icon)
+            return (
+                <>
+                    {item?.test?.[0]?.icon}
+                </>
+            )
+        },
     }
   ];
   

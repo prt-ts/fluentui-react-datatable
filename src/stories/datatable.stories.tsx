@@ -3,6 +3,7 @@ import { FluentUIReactTable } from "../index"
 import { columns, items } from './data';
 import { ComponentStory, ComponentMeta } from '@storybook/react'; 
 
+
 export default {
     title: 'Fluent UI DataTable',
     component: FluentUIReactTable,

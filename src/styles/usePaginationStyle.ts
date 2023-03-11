@@ -4,18 +4,19 @@ export const usePaginationStyle = makeStyles({
     wrapper: {
         columnGap: "0.2rem",
         display: "flex",
-        alignItems: "center" 
+        alignItems: "center",
+        justifyContent: "space-between"
     },
-    pageBtn: {         
+    pageBtn: {
         minWidth: "1.3rem",
         alignContent: "center",
-        alignItems : "center" 
+        alignItems: "center"
     },
-    pageSelectionWrapper: {   
-        minWidth:"3rem"
+    pageSelectionWrapper: {
+        minWidth: "1rem"
     },
-    pageSelectionDropdown: {   
+    pageSelectionDropdown: {
         minWidth: "100%"
     },
-    
+
 });

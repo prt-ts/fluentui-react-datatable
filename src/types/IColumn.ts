@@ -113,5 +113,7 @@ export interface IColumn {
      */
     disableColumnHideShow? : boolean | undefined;
 
-    onRender? : (item : any) => string | JSX.Element;     
+    onRender? : (item : any) => string | JSX.Element; 
+
+    onCellActionRender? : (item : any) => string | JSX.Element;     
 } 

@@ -1,9 +1,9 @@
-import { Body1Stronger, Button, Checkbox, Radio, TableCell, TableCellLayout, TableRow, useId } from '@fluentui/react-components'
+import { Body1Stronger, Button, Checkbox, Radio, TableCell, TableCellActions, TableCellLayout, TableRow, useId } from '@fluentui/react-components'
 import { ChevronCircleDownRegular, ChevronCircleUpRegular } from '@fluentui/react-icons'
 import { useObservableState } from 'observable-hooks'
 import * as React from 'react'
 import { BehaviorSubject } from 'rxjs'
-import { useDataTableGrid, useSelection } from '../../hooks' 
+import { useDataTableGrid, useSelection } from '../../hooks'
 import { DefaultGridConfig, IColumn, IGridConfig, IGroup } from '../../types'
 import { tryGetListValue, tryGetObjectValue } from '../../utils'
 
@@ -11,16 +11,16 @@ export const DataTableGroupedPage: React.FunctionComponent<{
     groupKey: string,
     group: IGroup,
     columns: IColumn[]
-    pagedItems: any[] 
-}> = ({groupKey, group, columns, pagedItems }) => {
+    pagedItems: any[]
+}> = ({ groupKey, group, columns, pagedItems }) => {
     const radioName = useId("radio");
     const { gridConfig$, selectedItems$, groups$ } = useDataTableGrid();
     const { handleSelectionChange } = useSelection();
     const selectedValues = useObservableState(selectedItems$ as BehaviorSubject<any[]>, []);
     const groups = useObservableState(groups$ as BehaviorSubject<IGroup[]>, []);
     const gridConfig = useObservableState<IGridConfig>(gridConfig$, DefaultGridConfig);
- 
-    const groupPadding = 20 * (group?.level ?? 0);
+
+    const groupPadding = 15 * (group?.level ?? 0);
 
     const isChecked = React.useMemo((): boolean | "mixed" => {
         const isAllSelected = [...pagedItems]?.splice(group.startIndex, group.count)
@@ -98,7 +98,7 @@ export const DataTableGroupedPage: React.FunctionComponent<{
                     groupKey={index + group.key}
                     group={g}
                     pagedItems={pagedItems}
-                    columns={columns} 
+                    columns={columns}
                 />)
             }
             {
@@ -124,8 +124,11 @@ export const DataTableGroupedPage: React.FunctionComponent<{
                                 {columns.map((column, index) => (
                                     <TableCell key={column.fieldName + "_" + index}>
                                         <TableCellLayout media={column.mediaFieldName ? tryGetObjectValue(column.mediaFieldName, item) : undefined}>
-                                          {column.onRender ? column.onRender(item) : tryGetObjectValue(column.fieldName, item)}
+                                            {column.onRender ? column.onRender(item) : tryGetObjectValue(column.fieldName, item)}
                                         </TableCellLayout>
+                                        {column.onCellActionRender ? <TableCellActions>
+                                            {column.onCellActionRender(item)}
+                                        </TableCellActions> : <></>}
                                     </TableCell>
                                 ))}
                             </TableRow>

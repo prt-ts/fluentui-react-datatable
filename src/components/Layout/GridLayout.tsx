@@ -40,7 +40,7 @@ export const GridLayout: React.FunctionComponent<IDataGridProps> = (props) => {
     return (
         <div>
             <GlobalSearch />
-            <Table arial-label={props.gridName} >
+            <Table size={gridConfig.tableSize}  arial-label={props.gridName}>
                 <TableHeader>
                     <TableRow className={headerRowStyle.root}>
                         {(selectionMode !== "none") ?

@@ -1,10 +1,11 @@
 import { Button, Divider, Popover, PopoverSurface, PopoverTrigger, PositioningImperativeRef } from '@fluentui/react-components'
-import { ChevronCircleDownRegular, ChevronCircleUpRegular, ChevronDownFilled, DoubleTapSwipeUpFilled, DrawerArrowDownloadFilled, EditRegular, GroupDismissRegular, GroupListRegular, SearchSquareRegular } from '@fluentui/react-icons'
+import { ChevronCircleDownRegular, ChevronCircleUpRegular } from '@fluentui/react-icons'
 import * as React from 'react'
 import { IColumn } from './../../types';
 import { useHeaderPopoverStyle } from '../../styles';
 import { FilterContainer } from '../ColumnFilterTypes/FilterContainer';
 import { GroupColumn } from '../ColumnGroup/GroupColumn';
+import { FilteredIcon, GroupedIcon, PopoverClosedIcon, PopoverOpenedIcon } from '../../utils';
 
 export const HeaderPopover: React.FunctionComponent<{
     column: IColumn
@@ -28,13 +29,13 @@ export const HeaderPopover: React.FunctionComponent<{
                     size='small'
                     appearance="transparent"
                     iconPosition={"after"}
-                    icon={isOpen ? <ChevronCircleUpRegular /> : <ChevronCircleDownRegular />}
+                    icon={isOpen ? <PopoverOpenedIcon /> : <PopoverClosedIcon />}
                 >
                     {
-                        (column.isFiltered ? <SearchSquareRegular fontSize={20} /> : <></>)
+                        (column.isFiltered ? <FilteredIcon fontSize={20} /> : <></>)
                     }
                     {
-                        (column.isGrouped ? <GroupListRegular fontSize={20} /> : <></>)
+                        (column.isGrouped ? <GroupedIcon fontSize={20} /> : <></>)
                     }
                 </Button>
             </PopoverTrigger>

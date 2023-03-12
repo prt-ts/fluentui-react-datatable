@@ -75,10 +75,17 @@ export interface IGridConfig  {
      */
     disableGridColumnHideShow? : boolean | undefined;
 
+    /**
+     * Affects the sizes of all table subcomponents
+     * @default medium
+     */
+    tableSize?: 'extra-small' | 'small' | 'medium';
+
 } 
 
 
 export const DefaultGridConfig : IGridConfig = {
+    tableSize : "medium",
     gridName: "",
     gridPrimaryField: "id",
 

@@ -27,6 +27,7 @@ export const useInitializeStore = ({
   // all config will initialize at the begining only
   React.useEffect(() => {
     gridConfig$?.next({
+      tableSize: rest?.tableSize ?? DefaultGridConfig.tableSize,
       gridName: rest?.gridName,
       gridPrimaryField: rest?.gridPrimaryField,
 

@@ -17,38 +17,55 @@ const MoreHorizontalIcon = bundleIcon(
   MoreHorizontalRegular
 );
 
-const columns : IColumn[] = [
-    { 
-        fieldName: "file.label", 
-        headerLabel: "File", 
-        mediaFieldName: "file.icon", 
-        isSorted : true, 
-        isSortedDescending : true,
-        onCellActionRender : (item) => {
-            return <>
-              <Button icon={<EditIcon />} appearance="subtle" />
-              <Button icon={<MoreHorizontalIcon />} appearance="subtle" />
-            </>
-        }
-     },
-    { fieldName: "author.label", headerLabel: "Author", isSorted : true, isSortedDescending : false, 
-        isGrouped:true, groupOrderNumber: 1},
-    { fieldName: "lastUpdated.label", headerLabel: "Last updated", isFiltered: true, isGrouped:true, groupOrderNumber: 2 },
-    { fieldName: "lastUpdate.label", headerLabel: "Last update" },
-    { 
-        fieldName: "test.[0].label", 
-        headerLabel: "Another Header", 
-        isFiltered: true, 
-        onRender: (item): JSX.Element => {
-            //console.log("called", item?.[0]?.icon)
-            return (
-                <>
-                    {item?.test?.[0]?.icon}
-                </>
-            )
-        },
+const columns : IColumn[] = [{
+    fieldName: "userId",
+    headerLabel: "User Id"
+},{
+    fieldName: "id",
+    headerLabel: "ID"
+},{
+    fieldName: "title",
+    headerLabel: "Title"
+}, {
+    fieldName : "completed",
+    headerLabel : "Is Completed",
+    onRender: (item) => {
+        return (item.completed ? "Yes" : "No")
     }
-  ];
+}]
+
+// const columns : IColumn[] = [
+//     { 
+//         fieldName: "file.label", 
+//         headerLabel: "File", 
+//         mediaFieldName: "file.icon", 
+//         isSorted : true, 
+//         isSortedDescending : true,
+//         onCellActionRender : (item) => {
+//             return <>
+//               <Button icon={<EditIcon />} appearance="subtle" />
+//               <Button icon={<MoreHorizontalIcon />} appearance="subtle" />
+//             </>
+//         }
+//      },
+//     { fieldName: "author.label", headerLabel: "Author", isSorted : true, isSortedDescending : false, 
+//         isGrouped:true, groupOrderNumber: 1},
+//     { fieldName: "lastUpdated.label", headerLabel: "Last updated", isFiltered: true, isGrouped:true, groupOrderNumber: 2 },
+//     { fieldName: "lastUpdate.label", headerLabel: "Last update" },
+//     { 
+//         fieldName: "test.[0].label", 
+//         headerLabel: "Another Header", 
+//         isFiltered: true, 
+//         onRender: (item): JSX.Element => {
+//             //console.log("called", item?.[0]?.icon)
+//             return (
+//                 <>
+//                     {item?.test?.[0]?.icon}
+//                 </>
+//             )
+//         },
+//     }
+//   ];
   
   const items = [
     {

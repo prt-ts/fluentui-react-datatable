@@ -13,10 +13,12 @@ export const useGrouping = () => {
             ...columns.map((col) => col.groupOrderNumber ?? 1),
           ]);
 
+          console.log(lastMaxGroupOrder);
+
         const newColumn = columns.map(col => {
             if (column.fieldName == col.fieldName) {
                 col.isGrouped = !col.isGrouped;
-                col.groupOrderNumber = !col.isGrouped? lastMaxGroupOrder + 1 : 0;
+                col.groupOrderNumber = col.isGrouped? lastMaxGroupOrder + 1 : 0;
             }
             return col;
         })

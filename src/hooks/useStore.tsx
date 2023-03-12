@@ -92,7 +92,7 @@ export const useTableStore = () => {
                 ?.filter((x) => x.isGrouped)
                 ?.sort((x, y) => (x.groupOrderNumber && y.groupOrderNumber && x.groupOrderNumber > y.groupOrderNumber) ? 1 : -1
                 );
-
+            console.log(groupedColumns);
             const groups = groupItems(
                 [...pagedItems],
                 [...groupedColumns],

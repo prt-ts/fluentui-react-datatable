@@ -24,7 +24,7 @@ function getGroups(
 
       if (
         !currentGroup ||
-        getLeafGroupKey(currentGroup.key, separator) !== itemColumnValue
+        getLeafGroupKey(currentGroup.key, separator) != itemColumnValue
       ) {
         current.push({
           key:

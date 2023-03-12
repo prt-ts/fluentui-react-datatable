@@ -29,5 +29,5 @@ DefaultExample.args = {
     gridName: 'Example Grid',
     gridPrimaryField: 'file.label',
     columns: [...columns],
-    items: [...items] 
+    items: [...items]  
 };
